@@ -1,0 +1,32 @@
+<header class="b-header">
+  <div class="wrapper region">
+    <h1><%= page %></h1>
+  </div>
+</header>
+  
+<article>
+  <div class="wrapper region stack">
+    <% if (typeof data !== "undefined" && data) { %>
+      <ol role="list">
+        <% data.forEach((result) => { %>
+          <li class="sidebar">
+            <img src="" alt="image of the <%= result.title %> event">
+            <div class="flow">
+              <h2><%= result.title %></h2>
+              <p class="cluster">
+                <span><%= result.type %></span>
+                <span><%= new Date(result.date).toLocaleDateString('default', { day: '2-digit', month: '2-digit', year: 'numeric' }) %></span>
+                <% if (result.city && result.type === 'event') { %>
+                  -<span><%= result.city %></span>
+                <% } %>
+              </p>
+              <p><%= result.description %></p>              
+            </div>
+          </li>
+        <% }); %>
+      </ol>
+    <% } else { %>
+      <h2>no data to display</h2>
+    <% } %>
+  </div>
+</article>

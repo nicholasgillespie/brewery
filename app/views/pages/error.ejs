@@ -1,0 +1,23 @@
+<header class="b-header">
+  <div class="wrapper region">
+
+    <% if (typeof statusCode !== 'undefined') { %>
+      <h1><%= statusCode %></h1>
+    <% } else { %>
+      <h1>error</h1>  
+    <% } %>
+    <p><% if (message === "You are not logged in. Please log in to get access.") { %>
+      You are not logged in. Please <a href="/login">log in</a> to get access.
+    <% } else if (message === "Invalid token. Please log in again.") { %>
+      Invalid token. Please <a href="/login">log in</a> again.
+    <% } else if (message === "Your token has expired. Please log in again.") { %>
+      Your token has expired. Please <a href="/login">log in</a> again.
+    <% } else if (message === "You recently changed password. Please log in again.") { %>
+      User recently changed password. Please <a href="/login">log in</a> again.
+    <% } else { %>
+      <%= message %>
+    <% } %></p>
+    
+    
+  </div>
+</header>

@@ -1,0 +1,108 @@
+<header>
+  <div class="wrapper region">
+    <h1>craft beer for all</h1>
+  </div>
+
+</header>
+
+<article class="b-beers">
+  <div class="wrapper region">
+    <% if (typeof data !== "undefined" && data) { %>
+      <h2>beers</h2>
+      <ol role="list">
+        <% data.forEach((result) => { %>
+          <li>
+            <a class="sidebar" href="beers/<%= result.slug %>">
+              <div>
+                <img src="" alt="image of the <%= result.name %> beer">
+              </div>
+              <div class="[ flow ][ u-padding ]" data-padding='large'>
+                <h3><%= result.name %></h3>
+                <p>sexy words</p>
+                <ul role="list">
+                  <li><%= result.style %></li>
+                  <li><span>X</span><%= result.abv %><span>ABV</span></li>
+                  <li><span>X</span><%= result.ibu %><span>IBU</span></li>
+                  <li><span>X</span><%= result.ebv %><span>EBV</span></li>
+                </ul>
+              </div>
+            </a>
+          </li>
+        <% }); %>
+      </ol>
+      <div><a href="beers">view all beers</a></div>
+    <% } else { %>
+      <h2>no data to display</h2>
+    <% } %>
+  </div>
+</article>
+
+<article class="b-find-us">
+  <div class="wrapper region stack">
+    <h2><span>embarquez</span> <span>dans</span> <span>l'expedition</span></h2>
+    <a href="/find-us">retrouvez nos bières</a>
+  </div>
+</article>
+
+<article class="b-actus-artistes">
+  <div class="wrapper region">
+    <div class="switcher">
+      <a href="actus-events" style="background-image: url('/img/test.png')">
+        <h2>actus / events</h2>
+      </a>
+      <a href="artistes" style="background-image: url('/img/test.png')">
+        <h2>artistes</h2>
+      </a>
+    </div>
+  </div>
+</article>
+
+<article id="main-content" class="b-brasserie">
+  <div class="wrapper region stack">
+    <h2>brasserie</h2>
+    <div class="switcher">
+        <img src="" alt="image of the brasserie">
+      <div class="flow">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam dolorum sequi odit optio nulla ipsum consectetur fugit doloremque voluptates culpa.</p>
+        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repudiandae provident, ex ut labore sit facere ipsa veniam cupiditate eaque enim eligendi reprehenderit officiis eius error distinctio omnis animi harum. Eligendi!</p>
+      </div>
+    </div>
+  </div>
+</article>
+
+<article class="b-contact">
+  <div class="wrapper region">
+    <h2>contact</h2>
+    <div class="switcher">
+      <div class="stack">
+        <div class="flow">
+          <h4>heading</h4>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+        <div class="flow">
+          <h4>heading</h4>
+          <p>Lorem ipsum dolor sit amet.</p>
+        </div>
+      </div>
+      <div>
+        <form class="stack">
+          <div class="switcher">
+            <div>
+              <label class="u-vh" for="firstname">firstname (required)</label>
+              <input placeholder="firstname" type="text" id="firstname" name="firstname" autocomplete="firstname">
+            </div>
+            <div>
+              <label class="u-vh" for="surname">surname (required)</label>
+              <input placeholder="surname" type="text" id="surname" name="surname" autocomplete="surname">
+            </div>
+          </div>
+          <label class="u-vh" for="email">email (required)</label>
+          <input placeholder="email" type="email" id="email" name="email" autocomplete="email">
+          <label class="u-vh" for="message">Message</label>
+          <textarea placeholder="message" id="message" name="message"></textarea>
+          <button>Save</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</article>

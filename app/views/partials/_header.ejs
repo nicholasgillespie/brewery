@@ -1,0 +1,25 @@
+<body>
+  <header>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <div class="wrapper region" data-region='space-xs-l'>
+      <nav>
+        <div class="logo" title="Navigate to the homepage">
+          <a href="/">
+             <img src="" alt="Expedition Brewery logo"></img>
+          </a>
+       </div>
+       <div id="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </nav>
+    </div>
+  </header>
+  <div id="slideout">
+    <ul role="list" class="cluster" data-cluster="test">
+      <%- include('./menu'); -%>
+    </ul>
+  </div>
+  <div id="overlay"></div>
+  <main id="main-content" class="page-<%= page %>">

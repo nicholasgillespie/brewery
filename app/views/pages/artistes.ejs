@@ -1,0 +1,42 @@
+<header class="b-header">
+  <div class="wrapper region">
+    <h1><%= page %></h1>
+  </div>
+</header>
+
+<article>
+  <div class="wrapper region stack">
+    <% if (typeof data !== "undefined" && data) { %>
+      <ol role="list">
+        <% data.forEach((result) => { %>
+          <li class="sidebar">
+            <img src="" alt="image of <%= result.firstname %> <%= result.surname %>">
+            <div class="flow">
+              <h2><%= result.firstname %> <%= result.surname %></h2>
+              <p><%= result.description %></p>
+              <ul role="list" class="cluster">
+                <% if (result.facebook) { %>
+                  <li><a href="<%= result.facebook %>">Facebook</a></li>
+                <% } %>
+                <% if (result.instagram) { %>
+                  <li><a href="<%= result.instagram %>">Instagram</a></li>
+                <% } %>
+                <% if (result.twitter) { %>
+                  <li><a href="<%= result.twitter %>">Twitter</a></li>
+                <% } %>
+                <% if (result.youtube) { %>
+                  <li><a href="<%= result.youtube %>">YouTube</a></li>
+                <% } %>
+              </ul>
+              <% if (result.website) { %>
+                <a href="<%= result.website %>">visit website</a>
+              <% } %>
+            </div>
+          </li>
+        <% }); %>
+      </ol>
+    <% } else { %>
+      <h2>no data to display</h2>
+    <% } %>
+  </div>
+</article>

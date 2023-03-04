@@ -1,0 +1,39 @@
+<header class="b-header">
+  <div class="wrapper region">
+    <h1><%= page %></h1>
+  </div>
+</header>
+
+<article>
+  <div class="wrapper region stack">
+    <% if (typeof data !== "undefined" && data) { %>
+      <ol role="list" class="grid">
+        <% data.forEach((result) => { %>
+          <li>
+            <div class="[ flow ][ u-padding ]">
+              <div class="cluster" data-cluster='space-between'>
+                <h2><%= result.name %></h2>
+                <ul class="cluster">
+                  <% if (result.available) { %>
+                    <li><%= result.available.tap ? "T" : "" %></li>
+                    <li><%= result.available.bottle ? "B" : "" %></li>
+                  <% } %>
+                </ul>                
+              </div>
+              <ul class="flow">
+                <li><%= result.address %>,</li>
+                <li><% if (result.postalCode) { %><span><%= result.postalCode %></span>, <% } %><%= result.city %>,</li>
+                <li><%= result.country %></li>
+                <% if (result.website) { %>
+                  <li><a href="<%= result.website %>">view more</a></li>
+                <% } %>
+              </ul>
+            </div>
+          </li>
+        <% }); %>
+      </ol>
+    <% } else { %>
+      <h2>no data to display</h2>
+    <% } %>
+  </div>
+</article>

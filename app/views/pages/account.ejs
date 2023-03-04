@@ -1,0 +1,31 @@
+<header class="b-header">
+  <div class="wrapper region">
+    <h1><%= page %></h1>
+  </div>
+</header>
+
+<article>
+  <div class="wrapper region">
+    <div class="sidebar">
+      <div class="[ cluster ][ u-padding ]" data-cluster="space-between">
+        <ul role="list" class="stack">
+          <li><button id="account-btn" href="#">account</button></li>
+          <% if (user.role === 'admin') { %>
+            <h3>admin</h3>
+            <li><button id="beers-btn" href="#">manage beers</button></li>
+            <li><button id="locations-btn" href="#">manage locations</button></li>
+            <li><button id="actus-btn" href="#">manage actus & events</button></li>
+            <li><button id="artistes-btn" href="#">manage artistes</button></li>
+            <li><button id="users-btn" href="#">view users</button></li>
+            <% } %>
+        </ul>
+      </div>
+
+      <div id="container">
+        <div id="container-account"></div>
+        <div id="container-admin"></div>
+      </div>
+
+    </div>
+  </div>
+</article>

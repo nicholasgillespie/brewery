@@ -1,0 +1,27 @@
+<header class="b-header">
+  <div class="wrapper region">
+    <h1><%= page %></h1>
+  </div>
+</header>
+  
+<article>
+  <div class="wrapper region">
+    <% if (typeof data !== "undefined" && data) { %>
+      <ol role="list" class="grid">
+        <% data.forEach((result) => { %>
+          <li>
+            <a href="beers/<%= result.slug %>">
+              <img src="" alt="image of the <%= result.name %> beer">
+              <div class="[ flow ][ u-padding ]">
+                <h2><%= result.name %></h2>
+                <p><%= result.style %></p>
+              </div>
+            </a>
+          </li>
+        <% }); %>
+      </ol>
+    <% } else { %>
+      <h2>no data to display</h2>
+    <% } %>
+  </div>
+</article>

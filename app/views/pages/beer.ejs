@@ -1,0 +1,36 @@
+<header class="b-header">
+  <div class="wrapper region">
+    <h1><%= data.name %></h1>
+  </div>
+</header>
+  
+<article>
+  <div class="wrapper region stack">
+    <div class="flow">
+      <img src="" alt="image of the <%= data.name %> beer">
+      <h2><%= data.name %></h2>
+      <p><%= data.description %></p>
+      <p><%= data.style %></p>
+      <p><%= data.abv %></p>
+      <p><%= data.ibu %></p>
+      <p><%= data.ebv %></p>
+      <ul>
+        <% data.malts.forEach((result) => { %>
+          <li><%= result %></li>
+        <% }); %>
+      </ul>
+      <ul>
+        <% data.hops.forEach((result) => { %>
+          <li><%= result %></li>
+        <% }); %>
+      </ul>
+      <% if (data.spices) { %>
+        <ul>
+          <% data.spices.forEach((result) => { %>
+            <li><%= result %></li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+</article>
