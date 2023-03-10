@@ -46,7 +46,7 @@ export default {
 
   async createOne(req, res, next) {
     // Validate required fields in request body & prepare document
-    const document = await schema.create(req.body);
+    const document = await schema.create(req.body, req.file);
 
     // prepare query & execute
     const query = model.insertOne('artistes', document);
@@ -62,7 +62,7 @@ export default {
   async updateOne(req, res, next) {
     // Validate required fields in request body & prepare document
     const filter = { slug: req.params.slug };
-    const update = await schema.update(req.body);
+    const update = await schema.update(req.body, req.file);
 
     // prepare query & execute
     const query = model.updateOne('artistes', filter, update);

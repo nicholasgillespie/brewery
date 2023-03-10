@@ -1,6 +1,7 @@
 /* IMPORT MODEL & SCHEMA //////////////////// */
 import model from '../models/modelFactory.js';
 import schema from '../schemas/beerSchema.js';
+// import fileProcess from '../utils/fileProcess.js';
 /* IMPORT ERROR HANDLER //////////////////// */
 import AppError from '../errors/appError.js';
 
@@ -44,15 +45,15 @@ export default {
     });
   },
 
-  async createOne(req, res, next) {
+  async createOne(req, res, next) {   
     // Validate required fields in request body & prepare document
-    const document = await schema.create(req.body);
+    const document = await schema.create(req.body, req.files);
 
-    // prepare query & execute
+    // Execute the insert query
     const query = model.insertOne('beers', document);
     const result = await query;
-
-    // return response
+  
+    // Return the response
     return res.status(result.statusCode).json({
       status: result.status,
       message: result.message,
@@ -62,7 +63,7 @@ export default {
   async updateOne(req, res, next) {
     // Validate required fields in request body & prepare document
     const filter = { slug: req.params.slug };
-    const update = await schema.update(req.body);
+    const update = await schema.update(req.body, req.files);
 
     // prepare query & execute
     const query = model.updateOne('beers', filter, update);

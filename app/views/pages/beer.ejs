@@ -1,36 +1,54 @@
 <header class="b-header">
-  <div class="wrapper region">
+  <div class="wrapper region" style="background-image: url('/img/beers/<%= data.cover %>')">
     <h1><%= data.name %></h1>
   </div>
 </header>
   
 <article>
   <div class="wrapper region stack">
-    <div class="flow">
-      <img src="" alt="image of the <%= data.name %> beer">
-      <h2><%= data.name %></h2>
-      <p><%= data.description %></p>
-      <p><%= data.style %></p>
-      <p><%= data.abv %></p>
-      <p><%= data.ibu %></p>
-      <p><%= data.ebv %></p>
-      <ul>
-        <% data.malts.forEach((result) => { %>
-          <li><%= result %></li>
-        <% }); %>
-      </ul>
-      <ul>
-        <% data.hops.forEach((result) => { %>
-          <li><%= result %></li>
-        <% }); %>
-      </ul>
-      <% if (data.spices) { %>
+    <div class="grid" data-layout='50-50'>
+      <div class="sidebar">
+        <img src="/img/beers/<%= data.image %>" alt="image of the <%= data.name %> beer">
+        <div class="flow">
+          <h2><%= data.name %></h2>
+          <p><%= data.style %></p>
+          <div class="cluster">
+            <p><%= data.abv %></p>
+            <p><%= data.ibu %></p>
+            <p><%= data.ebv %></p>
+          </div>
+        </div>
+      </div>
+      <div class="flow">
+        <p><%= data.description %></p>
+        <h3>
+          <% data.keywords.forEach((keyword, index) => { %>
+            <%= keyword %><%= index !== data.keywords.length - 1 ? ',' : '' %>
+          <% }); %>
+        </h3>
+      </div>
+    </div>
+    <div class="switcher">
+      <div class="stack">
         <ul>
-          <% data.spices.forEach((result) => { %>
+          <% data.malts.forEach((result) => { %>
             <li><%= result %></li>
           <% }); %>
         </ul>
-      <% } %>
+        <ul>
+          <% data.hops.forEach((result) => { %>
+            <li><%= result %></li>
+          <% }); %>
+        </ul>
+        <% if (data.spices) { %>
+          <ul>
+            <% data.spices.forEach((result) => { %>
+              <li><%= result %></li>
+            <% }); %>
+          </ul>
+        <% } %>
+      </div>
+      <img src="/img/beers/<%= data['aroma-web'] %>" alt="aroma web image of the <%= data.name %> beer">
     </div>
   </div>
 </article>

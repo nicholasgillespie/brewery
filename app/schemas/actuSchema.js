@@ -2,9 +2,11 @@
 import validator from '../validators/validator.js';
 /* IMPORT HELPER FUNCTIONS //////////////////// */
 import { normalizeData, slugify } from '../utils/helpers.js';
+/* IMAGE PROCESSING //////////////////// */
+import processFile from '../utils/processFile.js';
 
 export default {
-  async create(reqBody) {
+  async create(reqBody, reqFile) {
     // 1. Normalize data
     const reqBodyNormalized = normalizeData(reqBody);
 
@@ -21,8 +23,9 @@ export default {
     if (time) validator.validateTime(time);
     if (address) validator.validateAddress(address);
     if (postalCode) validator.validatePostalCode(postalCode);
-    if (type === 'event') validator.validateCity(city);
-    if (type === 'event' && country) validator.validateCountry(country);
+    if (type === 'event' || city) validator.validateCity(city);
+    if (type === 'event' || country) validator.validateCountry(country);
+    validator.validateFileImage(reqFile, ['image']);
 
     // 4. Create document object
     const document = {
@@ -34,19 +37,23 @@ export default {
     if (time) document.time = time;
     if (address) document.address = address;
     if (postalCode) document.postalCode = postalCode;
-    if (type === 'event') document.city = city;
-    if (type === 'event' && country) document.country = country;
+    if (city) document.city = city;
+    if (country) document.country = country;
 
-    // 5. Add additional fields
+    // 5. Resize image & save to disk & update document
+    await processFile.resizeSavePhoto('actus', 'image')(document.title, reqFile);
+    document.image = reqFile.filename;
+
+    // 6. Add additional fields
     document.slug = slugify(document.title);
     document.createdAt = new Date();
     document.active = true;
 
-    // 6. Return document
+    // 7. Return document
     return document;
   },
 
-  async update(reqBody) {
+  async update(reqBody, reqFile) {
     // 1. Normalize data
     const reqBodyNormalized = normalizeData(reqBody);
 
@@ -63,9 +70,10 @@ export default {
     if (time) validator.validateTime(time);
     if (address) validator.validateAddress(address);
     if (postalCode) validator.validatePostalCode(postalCode);
-    if (type === 'event') validator.validateCity(city);
-    if (type === 'event' && country) validator.validateCountry(country);
-    validator.validateBoolean(reqBodyNormalized.active);
+    if (type === 'event' || city) validator.validateCity(city);
+    if (type === 'event' || country) validator.validateCountry(country);
+    if (reqFile) validator.validateFileImage(reqFile, ['image']);
+    validator.validateBoolean(active);
 
     // 4. Create document object
     const document = {
@@ -78,13 +86,17 @@ export default {
     if (time) document.time = time;
     if (address) document.address = address;
     if (postalCode) document.postalCode = postalCode;
-    if (type === 'event') document.city = city;
-    if (type === 'event' && country) document.country = country;
+    if (city) document.city = city;
+    if (country) document.country = country;
 
-    // 5. Add additional fields
+    // 5. Resize image & save to disk & update document
+    if (reqFile) await processFile.resizeSavePhoto('actus', 'image')(document.title, reqFile);
+    if (reqFile) document.image = reqFile.filename;
+
+    // 6. Add additional fields
     document.slug = slugify(document.title);
 
-    // 6. Return document
+    // 7. Return document
     return document;
   },
 };

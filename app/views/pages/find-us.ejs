@@ -6,7 +6,7 @@
 
 <article>
   <div class="wrapper region stack">
-    <% if (typeof data !== "undefined" && data) { %>
+    <% if (Array.isArray(data) && data.length > 0) { %>
       <ol role="list" class="grid">
         <% data.forEach((result) => { %>
           <li>

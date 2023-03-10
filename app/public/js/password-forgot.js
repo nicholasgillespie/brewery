@@ -4,7 +4,7 @@ import alerts from './alert.js';
 export default {
   module: () => {
     /* DATA - (dt) //////////////////// */
-    const { SITE_URL, API_URL, PATH_USERS } = config;
+    const { API_URL, PATH_USERS } = config;
 
     /* ELEMENTS - (els) //////////////////// */
     const forgotPasswordForm = document.querySelector('.page-forgot-password form');
@@ -21,7 +21,6 @@ export default {
         if (!res.ok) throw new Error(`${data.message}${data.status}`);
         if (data.status === 'success') {
           alerts.showAlert(data.message, data.status);
-          // window.setTimeout(() => location.assign(`${SITE_URL}/login`), 1500);
         }
       } catch (err) {
         const message = err.message.slice(0, err.message.lastIndexOf('.') + 1);

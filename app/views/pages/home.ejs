@@ -7,18 +7,22 @@
 
 <article class="b-beers">
   <div class="wrapper region">
-    <% if (typeof data !== "undefined" && data) { %>
+    <% if (Array.isArray(data) && data.length > 0) { %>
       <h2>beers</h2>
       <ol role="list">
         <% data.forEach((result) => { %>
           <li>
             <a class="sidebar" href="beers/<%= result.slug %>">
               <div>
-                <img src="" alt="image of the <%= result.name %> beer">
+                <img src="/img/beers/<%= result.image %>" alt="image of the <%= result.name %> beer">
               </div>
               <div class="[ flow ][ u-padding ]" data-padding='large'>
                 <h3><%= result.name %></h3>
-                <p>sexy words</p>
+                <h4>
+                  <% result.keywords.forEach((keyword, index) => { %>
+                    <%= keyword %><%= index !== result.keywords.length - 1 ? ',' : '' %>
+                  <% }); %>
+                </h4>
                 <ul role="list">
                   <li><%= result.style %></li>
                   <li><span>X</span><%= result.abv %><span>ABV</span></li>
@@ -47,10 +51,10 @@
 <article class="b-actus-artistes">
   <div class="wrapper region">
     <div class="switcher">
-      <a href="actus-events" style="background-image: url('/img/test.png')">
+      <a href="actus-events" style="background-image: url('')">
         <h2>actus / events</h2>
       </a>
-      <a href="artistes" style="background-image: url('/img/test.png')">
+      <a href="artistes" style="background-image: url('')">
         <h2>artistes</h2>
       </a>
     </div>
@@ -100,7 +104,7 @@
           <input placeholder="email" type="email" id="email" name="email" autocomplete="email">
           <label class="u-vh" for="message">Message</label>
           <textarea placeholder="message" id="message" name="message"></textarea>
-          <button>Save</button>
+          <button>Send</button>
         </form>
       </div>
     </div>

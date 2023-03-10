@@ -13,6 +13,11 @@ const htmlBlock = {
       </div>
 
       <div class="flow">
+        <label for="keywords">keywords:</label>
+        <input type="text" id="keywords" placeholder="keywords">
+      </div>
+
+      <div class="flow">
         <label for="style">style:</label>
         <input type="text" id="style" placeholder="style">
       </div>
@@ -40,9 +45,24 @@ const htmlBlock = {
         <label for="hops">hops:</label>
         <input type="text" id="hops" placeholder="hops">
       </div>
-        <div class="flow">
+      <div class="flow">
         <label for="spices">spices:</label>
         <input type="text" id="spices" placeholder="spices">
+      </div>
+
+      <div class="switcher">
+        <div class="flow">
+          <label for="image">image:</label>
+          <input type="file" id="image" accept="image/*">
+        </div>
+        <div class="flow">
+          <label for="cover">cover image:</label>
+          <input type="file" id="cover" accept="image/*">
+        </div>
+        <div class="flow">
+          <label for="aroma-web">aroma web image:</label>
+          <input type="file" id="aroma-web" accept="image/*">
+        </div>
       </div>`,
 
   location: `
@@ -143,6 +163,13 @@ const htmlBlock = {
       <div class="flow">
         <label for="country">country:</label>
         <input type="text" id="country" placeholder="country">
+      </div>
+
+      <div class="switcher">
+        <div class="flow">
+          <label for="image">image:</label>
+          <input type="file" id="image" accept="image/*">
+        </div>,
       </div>`,
 
   artiste: `
@@ -196,6 +223,13 @@ const htmlBlock = {
       <div class="flow">
         <label for="youtube">youtube:</label>
         <input type="url" id="youtube" placeholder="youtube">
+      </div>
+      
+      <div class="switcher">
+        <div class="flow">
+          <label for="image">image:</label>
+          <input type="file" id="image" accept="image/*">
+        </div>,
       </div>`,
 
   user: `

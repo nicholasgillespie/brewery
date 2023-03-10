@@ -47,6 +47,7 @@ h4 {
   line-height: var(--line-height-small);
   letter-spacing: var(--tracking-s);
   hyphens: auto;
+  text-wrap: balance;
 }
 
 h1 {

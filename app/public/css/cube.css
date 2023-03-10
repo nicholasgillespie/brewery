@@ -88,6 +88,8 @@
 .stack > * { margin-block: 0; } 
 .stack > * + * { margin-block-start: var(--stack-space, 1.5rem); }
 
+.stack[data-stack='normal'] {  --stack-space: 1.5rem; }
+
 /* SWITCHER */
 .switcher {
   display: flex;
@@ -444,6 +446,20 @@
 
 .page-beers .grid p {
   -webkit-line-clamp: 3;
+}
+
+/* PAGE - BEER */
+.page-beer :where(.grid, .switcher) {
+  gap: var(--gutter);
+  gap: 1.5rem;
+}
+
+.page-beer .grid {
+  --grid-min-item-size: clamp(9.50rem, calc(5.15rem + 21.74vw), 22.00rem);
+}
+
+.page-beer .sidebar {
+  --sidebar-flex-basis: 10rem;
 }
 
 /* PAGE - FIND-US */

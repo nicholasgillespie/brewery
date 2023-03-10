@@ -3,6 +3,8 @@ import model from '../models/modelFactory.js';
 import schema from '../schemas/actuSchema.js';
 /* IMPORT ERROR HANDLER //////////////////// */
 import AppError from '../errors/appError.js';
+/* IMPORT IMAGE PROCESSING //////////////////// */
+import processFile from '../utils/processFile.js';
 
 /* EXPORT //////////////////// */
 export default {
@@ -44,10 +46,10 @@ export default {
     });
   },
 
-  async createOne(req, res, next) {
+  async createOne(req, res, next) {   
     // Validate required fields in request body & prepare document
-    const document = await schema.create(req.body);
-
+    const document = await schema.create(req.body, req.file);
+    
     // prepare query & execute
     const query = model.insertOne('actus', document);
     const result = await query;
@@ -62,7 +64,7 @@ export default {
   async updateOne(req, res, next) {
     // Validate required fields in request body & prepare document
     const filter = { slug: req.params.slug };
-    const update = await schema.update(req.body);
+    const update = await schema.update(req.body, req.file);
 
     // prepare query & execute
     const query = model.updateOne('actus', filter, update);

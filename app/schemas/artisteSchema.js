@@ -2,9 +2,11 @@
 import validator from '../validators/validator.js';
 /* IMPORT HELPER FUNCTIONS //////////////////// */
 import { normalizeData, slugify } from '../utils/helpers.js';
+/* IMAGE PROCESSING //////////////////// */
+import processFile from '../utils/processFile.js';
 
 export default {
-  async create(reqBody) {
+  async create(reqBody, reqFile) {
     // 1. Normalize data
     const reqBodyNormalized = normalizeData(reqBody);
 
@@ -24,6 +26,7 @@ export default {
     if (instagram) validator.validateSocialMedia(instagram, 'instagram');
     if (twitter) validator.validateSocialMedia(twitter, 'twitter');
     if (youtube) validator.validateSocialMedia(youtube, 'youTube');
+    validator.validateFileImage(reqFile, ['image']);
 
     // 4. Create document object
     const document = {
@@ -39,16 +42,20 @@ export default {
     if (twitter) document.twitter = twitter;
     if (youtube) document.youtube = youtube;
 
-    // 5. Add additional fields
+    // 5. Resize image & save to disk & update document
+    await processFile.resizeSavePhoto('artistes', 'image')(`${document.firstname} ${document.surname}`, reqFile);
+    document.image = reqFile.filename;
+
+    // 6. Add additional fields
     document.slug = slugify(`${document.firstname} ${document.surname}`);
     document.createdAt = new Date();
     document.active = true;
 
-    // 6. Return document
+    // 7. Return document
     return document;
   },
 
-  async update(reqBody) {
+  async update(reqBody, reqFile) {
     // 1. Normalize data
     const reqBodyNormalized = normalizeData(reqBody);
 
@@ -68,6 +75,7 @@ export default {
     if (instagram) validator.validateSocialMedia(instagram, 'instagram');
     if (twitter) validator.validateSocialMedia(twitter, 'twitter');
     if (youtube) validator.validateSocialMedia(youtube, 'youTube');
+    if (reqFile) validator.validateFileImage(reqFile, ['image']);
     validator.validateBoolean(reqBodyNormalized.active);
 
     // 4. Create document object
@@ -85,10 +93,14 @@ export default {
     if (twitter) document.twitter = twitter;
     if (youtube) document.youtube = youtube;
 
-    // 5. Add additional fields
+    // 5. Resize image & save to disk & update document
+    if (reqFile) await processFile.resizeSavePhoto('artistes', 'image')(`${document.firstname} ${document.surname}`, reqFile);
+    if (reqFile) document.image = reqFile.filename;
+
+    // 6. Add additional fields
     document.slug = slugify(`${document.firstname} ${document.surname}`);
 
-    // 6. Return document
+    // 7. Return document
     return document;
   },
 };

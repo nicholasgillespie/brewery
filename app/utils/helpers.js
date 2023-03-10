@@ -10,11 +10,20 @@ export const filterObject = (reqBody, ...allowedFields) => Object.entries(reqBod
 export const normalizeData = (data) => Object.entries(data)
   .reduce((acc, [key, value]) => {
     if (Array.isArray(value)) {
-      acc[key] = value.map((item) => (typeof item === 'string'
-        ? item.trim().toLowerCase().replace(/\s+/g, ' ')
-        : item));
+      acc[key] = value.map((item) => {
+        if (typeof item === 'string') {
+          const lowerItem = item.trim().toLowerCase().replace(/\s+/g, ' ');
+          return lowerItem === 'true' ? true
+            : lowerItem === 'false' ? false
+            : lowerItem;
+        }
+        return item;
+      });
     } else if (typeof value === 'string') {
-      acc[key] = value.trim().toLowerCase().replace(/\s+/g, ' ');
+      const lowerValue = value.trim().toLowerCase().replace(/\s+/g, ' ');
+      acc[key] = lowerValue === 'true' ? true
+        : lowerValue === 'false' ? false
+        : lowerValue;
     } else {
       acc[key] = value;
     }

@@ -74,6 +74,36 @@ export default {
     }
   },
 
+  validateFileImage(reqFile, array) {
+    if (!reqFile || !reqFile.fieldname) {
+      throw new AppError('Image is required.', 400);
+    } else if (!reqFile.mimetype.startsWith('image')) {
+      throw new AppError('Uploaded file is not an image.', 400);
+    } else if (!array.includes(reqFile.fieldname)) {
+      throw new AppError('Image field name is invalid.', 400);
+    }
+  },
+
+  validateFileImages(reqFiles, fieldNames, isNewRecord = true) {
+    fieldNames.forEach(fieldName => {
+      const files = reqFiles[fieldName];
+      if (!files || !Array.isArray(files) || files.length === 0) {
+        if (isNewRecord) {
+          throw new AppError(`${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)} is required.`, 400); 
+        }
+        return;
+      }
+      files.forEach(file => {
+        if (!file.mimetype.startsWith('image')) {
+          throw new AppError(`Uploaded ${fieldName} is not an image.`, 400);
+        } else if (!file.fieldname || !fieldNames.includes(file.fieldname)) {
+          throw new AppError(`Field name for uploaded ${fieldName} is invalid.`, 400);
+        }
+      });
+    });
+  },
+  
+
   validateFirstname(firstname) {
     if (!firstname || firstname.trim().length === 0) {
       throw new AppError('Firstname is required.', 400);
@@ -94,17 +124,17 @@ export default {
     } else {
       const ingredientArray = value.split(',').map((ingredient) => ingredient.trim());
       const validationRegExp = field === 'hops'
-        ? /^[a-zA-Z0-9À-ÖØ-öø-ÿ '’]+$/
-        : /^[a-zA-ZÀ-ÖØ-öø-ÿ '’]+$/;
+        ? /^[a-zA-Z0-9À-ÖØ-öø-ÿ '’-]+$/
+        : /^[a-zA-ZÀ-ÖØ-öø-ÿ '’-]+$/;
       if (ingredientArray.some((ingredient) => !validationRegExp.test(ingredient))) {
-        throw new AppError(`${capitalizedField} must contain only letters and numbers.`, 400);
+        throw new AppError(`${capitalizedField} must contain only letters, numbers, and accents.`, 400);
       } else if (ingredientArray.some((ingredient) => ingredient.length < 2)) {
         throw new AppError(`Each ${field} must be at least 2 characters.`, 400);
       } else if (ingredientArray.some((ingredient) => ingredient.length > 20)) {
         throw new AppError(`Each ${field} must be less than 20 characters.`, 400);
       }
     }
-  },
+  },  
 
   validateMessage(message) {
     if (!message || message.trim().length === 0) {
@@ -192,7 +222,7 @@ export default {
     }
   },
 
-  validateSocialMedia(account, fieldName) {
+  validateSocialMedia(account, field) {
     const capitalizedField = field.charAt(0).toUpperCase() + field.slice(1);
     if (!account || account.trim().length === 0) {
       throw new AppError(`${capitalizedField} is required.`, 400);

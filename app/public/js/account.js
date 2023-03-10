@@ -5,7 +5,7 @@ import htmlBlock from './htmlBlock.js';
 export default {
   module: () => {
     /* DATA - (dt) //////////////////// */
-    const { SITE_URL, API_URL, PATH_BEERS, PATH_LOCATIONS, PATH_ACTUS, PATH_ARTISTES, PATH_USERS } = config;
+    const { API_URL, PATH_BEERS, PATH_LOCATIONS, PATH_ACTUS, PATH_ARTISTES, PATH_USERS } = config;
     let htmlAdded = false;
 
     /* ELEMENTS - (els) //////////////////// */
@@ -71,7 +71,7 @@ export default {
       };  
     };
 
-    const updateAccount = async (body, type) => {
+    const updateAccount = async (body, type) => { 
       try {
         const url = type === 'password' 
           ? `${API_URL}${PATH_USERS}/update-password/` 
@@ -106,6 +106,26 @@ export default {
 
     const collectFormData = (form) => {
       const inputs = form.querySelectorAll('input, textarea, select');
+      const data = new FormData();
+      inputs.forEach(input => {
+        const id = input.getAttribute('id');
+        if (id !== 'active') {
+          if (input.type === 'checkbox') {
+            data.append(id, input.checked);
+          } else if (input.type === 'file') {
+            // Append a file if one is selected, otherwise append an empty string
+            const file = input.files.length ? input.files[0] : '';
+            data.append(id, file);
+          } else {
+            data.append(id, input.value);
+          }
+        }
+      });
+      return data;
+    };    
+
+    const collectData = (form) => {
+      const inputs = form.querySelectorAll('input, textarea, select');
       const data = {};
       inputs.forEach(input => {
         if (input.getAttribute('id') !== 'active') {
@@ -121,28 +141,32 @@ export default {
 
     const displayFormFields = (data, fields) => {
       let html = "";
-      let abvIbuEbvHtml = "";
-
+    
       fields.forEach((field, index) => {
-        if (field === "abv" || field === "ibu" || field === "ebv") {
-          abvIbuEbvHtml += `
+        if (["abv", "ibu", "ebv"].includes(field)) {
+          html += `
+            ${index === 0 || !["abv", "ibu", "ebv"].includes(fields[index - 1]) ? '<div class="switcher">' : ''}
             <div class="flow">
               <label for="${field}">${field}:</label>
               <input type="text" id="${field}" placeholder="${field}" value="${data[field] || ''}">
-            </div>`;
-          if (index === fields.length - 1 || fields[index + 1] !== "abv" && fields[index + 1] !== "ibu" && fields[index + 1] !== "ebv") {
-            html += `<div class="switcher">${abvIbuEbvHtml}</div>`;
-            abvIbuEbvHtml = "";
-          }
-        } else {
-          if (field === "description") {
-            html += `
+            </div>
+            ${index === fields.length - 1 || !["abv", "ibu", "ebv"].includes(fields[index + 1]) ? '</div>' : ''}`;
+        } else if (["image", "cover", "aroma-web"].includes(field)) {
+          html += `
+            ${index === 0 || !["abv", "ibu", "ebv", "image", "cover", "aroma-web"].includes(fields[index - 1]) ? '<div class="switcher">' : ''}
+            <div class="flow">
+              <label for="${field}">${field}:</label>
+              <input type="file" id="${field}" accept="image/*">
+            </div>
+            ${index === fields.length - 1 || !["abv", "ibu", "ebv", "image", "cover", "aroma-web"].includes(fields[index + 1]) ? '</div>' : ''}`;
+        } else if (field === "description") {
+          html += `
             <div class="flow">
               <label for="${field}">${field}:</label>
               <textarea id="${field}" rows="4" cols="50">${data[field] || ''}</textarea>
             </div>`;
-          } else if (field === "available") {
-            html += `
+        } else if (field === "available") {
+          html += `
             <fieldset>
               <legend>beer available on:</legend>
               <div>
@@ -154,39 +178,37 @@ export default {
                 <label for="bottle">bottle</label>
               </div>
             </fieldset>`;
-          } else if (field === "date") {
-            html += `
+        } else if (field === "date") {
+          html += `
             <div class="flow">
               <label for="${field}">${field}:</label>
               <input type="date" id="${field}" value="${data[field] || ''}">
             </div>`;
-          } else if (field === "time") {
-            html += `
-              <div class="flow">
-                <label for="${field}">${field}:</label>
-                <input type="time" id="${field}" value="${data[field] || ''}">
-              </div>`;
-          } else if (field === "type") {
-            html += `
-              <div class="flow">
-                <label for="${field}">${field}:</label>
-                <select id="${field}">
-                  ${data[field] === "actu" ? `<option value="actu" selected>actu</option>` : `<option value="actu">actu</option>`}
-                  ${data[field] === "event" ? `<option value="event" selected>event</option>` : `<option value="event">event</option>`}
-                </select>
-              </div>`;
-          } else {
-            html += `
+        } else if (field === "time") {
+          html += `
             <div class="flow">
               <label for="${field}">${field}:</label>
-              <input type="text" id="${field}" value="${data[field] || ''}">
+              <input type="time" id="${field}" value="${data[field] || ''}">
             </div>`;
-          }
+        } else if (field === "type") {
+          html += `
+            <div class="flow">
+              <label for="${field}">${field}:</label>
+              <select id="${field}">
+                ${data[field] === "actu" ? `<option value="actu" selected>actu</option>` : `<option value="actu">actu</option>`}
+                ${data[field] === "event" ? `<option value="event" selected>event</option>` : `<option value="event">event</option>`}
+              </select>
+            </div>`;
+        } else {
+          html += `
+            <div class="flow">
+              <label for="${field}">${field}:</label>
+              <input type="text" id="${field}" value="${data[field] === false ? 'false' : data[field] || ''}">
+            </div>`;
         }
       });
-    
       return html;
-    };    
+    };
 
     const handleErrorMessage = (err) => {
       const message = err.message.slice(0, err.message.lastIndexOf('.') + 1);
@@ -260,7 +282,7 @@ export default {
 
         // display form fields for each type of data
         if (type === "beer") {
-          let fields = ["name", "description", "style", "abv", "ibu", "ebv", "malts", "hops", "spices", "active"];
+          let fields = ["name", "description", "keywords", "style", "abv", "ibu", "ebv", "malts", "hops", "spices", "image", "cover", "aroma-web", "active"];
           html += displayFormFields(data, fields);
         }
         if (type === "location") {
@@ -268,11 +290,11 @@ export default {
           html += displayFormFields(data, fields);
         }
         if (type === "actu") {
-          let fields = ["type", "title", "description", "date", "time", "address", "postalCode", "city", "country", "active"];
+          let fields = ["type", "title", "description", "date", "time", "address", "postalCode", "city", "country", "image", "active"];
           html += displayFormFields(data, fields);
         }
         if (type === "artiste") {
-          let fields = ["firstname", "surname", "description", "email", "pseudonym", "website", "facebook", "instagram", "twitter", "youtube", "active"];
+          let fields = ["firstname", "surname", "description", "email", "pseudonym", "website", "facebook", "instagram", "twitter", "youtube", "image", "active"];
           html += displayFormFields(data, fields);
         }
         if (type === "user") {
@@ -308,14 +330,11 @@ export default {
       };
     };
     
-    const createOne = async (path, type, value, ref, body) => {
+    const createOne = async (path, type, value, ref, formData) => {
       try {
         const res = await fetch(`${API_URL}/${path}`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
+          body: formData,
         });
         const data = await res.json();
         if (!res.ok) throw new Error(`${data.message} ${data.status}`);
@@ -327,7 +346,7 @@ export default {
       } catch (err) {
         handleErrorMessage(err);
       };
-    };
+    };    
 
     const displayCreateOne = (type, value, ref) => {
       try {
@@ -373,10 +392,7 @@ export default {
       try {
         const res = await fetch(`${API_URL}/${path}/${id}`, {
           method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(body)
+          body: body,
         });
         const data = await res.json();
         if (!res.ok || data.status === 'warning') throw new Error(`${data.message} ${data.status}`);
@@ -433,7 +449,7 @@ export default {
         if (e.target.tagName === 'FORM' && e.target.closest('#container-account')) {
           e.preventDefault();
           const formId = e.target.id;
-          const data = collectFormData(e.target);
+          const data = collectData(e.target);
           if (formId === 'account-form') {
             updateAccount(data, 'account');
           } else if (formId === 'password-form') {
@@ -460,13 +476,13 @@ export default {
           } else if (btnText === 'create') {
             const data = collectFormData(e.target.closest('form'));
             createOne(`${itemType}s`, itemType, itemValue, itemRef, data);
-            
+
           } else if (btnText === 'edit' || btnText === 'view') {
             getOne(`/${itemType}s/${e.target.id}`, itemType, itemValue, itemRef);
 
           } else if (btnText === 'update' || btnText === 'activate') {
             const data = collectFormData(e.target.closest('form'));
-            data.active = true;
+            data.set('active', true);           
             updateOne(`${itemType}s`, itemType, itemValue, itemRef, data, itemPath);
             
           } else if (btnText === 'deactivate' || btnText === 'delete') {
@@ -492,7 +508,7 @@ export default {
                 if (e.target.closest("#confirm-delete")) {
                   if (e.target.innerText === "confirm") {
                     const data = collectFormData(document.querySelector('#container-admin form'));
-                    data.active = false;
+                    data.set('active', false);   
                     htmlAdded = false;
                     btnText === 'deactivate' 
                       ? updateOne(`${itemType}s`, itemType, itemValue, itemRef, data, itemPath) 

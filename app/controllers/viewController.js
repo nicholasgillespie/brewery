@@ -13,7 +13,7 @@ export default {
     // prepare document & options
     const filter = { active: { $ne: false } };
     const project = {
-      _id: 0, name: 1, slug: 1, style: 1, abv: 1, ibu: 1, ebv: 1,
+      _id: 0, name: 1, slug: 1, keywords: 1, style: 1, abv: 1, ibu: 1, ebv: 1, image: 1
     };
     const sort = {};
     const limit = 5;
@@ -66,7 +66,7 @@ export default {
     // prepare document & options
     const filter = { active: { $ne: false } };
     const project = {
-      _id: 0, name: 1, slug: 1, style: 1,
+      _id: 0, name: 1, slug: 1, style: 1, image: 1
     };
     const sort = {};
     const limit = {};

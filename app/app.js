@@ -16,11 +16,12 @@ import globalErrorHandler from './errors/errorHandler.js';
 
 /* IMPORT ROUTERS & CONTROLLERS //////////////////// */
 import viewRouter from './routes/viewRoutes.js';
+import beerRouter from './routes/beerRoutes.js';
+import locationRouter from './routes/locationRoutes.js';
+import actuRouter from './routes/actuRoutes.js';
+import artisteRouter from './routes/artisteRoutes.js';
+
 import apiRouter from './routes/apiRoutes.js';
-import beerController from './controllers/beerController.js';
-import locationController from './controllers/locationController.js';
-import actuController from './controllers/actuController.js';
-import artisteController from './controllers/artisteController.js';
 import userRouter from './routes/userRoutes.js';
 
 /* CURRENT DIRECTORY */
@@ -48,7 +49,7 @@ app.use(mongoSantize()); /* data sanitization against NoSQL query injection */
 app.use(xss()); /* data sanitization against XSS */
 app.use(hpp({ whitelist: ['style', 'abv', 'ibu'] })); /* prevent parameter pollution */
 app.use('/api', rateLimit({
-  max: 100,
+  max: 1000,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!',
 })); /* rate limit requests from same API */
@@ -56,17 +57,21 @@ app.use('/api', rateLimit({
 /* LOCAL MIDDLEWARE ////////////////////////////// */
 app.use((req, res, next) => {
   // console.log('Hello from the middleware');
-  // console.log('req.cookies', req.cookies);
   next();
 });
 
 /* MOUNT ROUTE //////////////////// */
 app.use('/', viewRouter);
-app.use(`${API_PATH}/beers`, apiRouter(beerController, ['admin']));
-app.use(`${API_PATH}/locations`, apiRouter(locationController, ['admin']));
-app.use(`${API_PATH}/actus`, apiRouter(actuController, ['admin']));
-app.use(`${API_PATH}/artistes`, apiRouter(artisteController, ['admin']));
+app.use(`${API_PATH}/beers`, beerRouter);
+app.use(`${API_PATH}/locations`, locationRouter);
+app.use(`${API_PATH}/actus`, actuRouter);
+app.use(`${API_PATH}/artistes`, artisteRouter);
 app.use(`${API_PATH}/users`, userRouter);
+// app.use(`${API_PATH}/beers`, apiRouter('beer', ['admin'], ['image', 'cover', 'aroma-web']));
+// app.use(`${API_PATH}/beers`, apiRouter('beer', ['admin'], ['image']));
+// app.use(`${API_PATH}/locations`, apiRouter('location', ['admin'], ['image']));
+// app.use(`${API_PATH}/actus`, apiRouter('actu', ['admin'], ['image']));
+// app.use(`${API_PATH}/artistes`, apiRouter('artiste', ['admin'], ['image']));
 
 /* UNHANDLED ROUTE //////////////////// */
 app.all('*', (req, res, next) => {

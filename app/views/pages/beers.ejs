@@ -6,12 +6,12 @@
   
 <article>
   <div class="wrapper region">
-    <% if (typeof data !== "undefined" && data) { %>
+    <% if (Array.isArray(data) && data.length > 0) { %>
       <ol role="list" class="grid">
         <% data.forEach((result) => { %>
           <li>
             <a href="beers/<%= result.slug %>">
-              <img src="" alt="image of the <%= result.name %> beer">
+              <img src="/img/beers/<%= result.image %>" alt="image of the <%= result.name %> beer">
               <div class="[ flow ][ u-padding ]">
                 <h2><%= result.name %></h2>
                 <p><%= result.style %></p>

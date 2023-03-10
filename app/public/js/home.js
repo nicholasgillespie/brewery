@@ -4,7 +4,7 @@ import alerts from './alert.js';
 export default {
   module: () => {
     /* DATA - (dt) //////////////////// */
-    const { SITE_URL, EMAIL_EB } = config;
+    const { SITE_URL } = config;
 
     /* ELEMENTS - (els) //////////////////// */
     const contactForm = document.querySelector('.page-home form');

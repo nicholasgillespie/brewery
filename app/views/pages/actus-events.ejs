@@ -6,11 +6,11 @@
   
 <article>
   <div class="wrapper region stack">
-    <% if (typeof data !== "undefined" && data) { %>
+    <% if (Array.isArray(data) && data.length > 0) { %>
       <ol role="list">
         <% data.forEach((result) => { %>
           <li class="sidebar">
-            <img src="" alt="image of the <%= result.title %> event">
+            <img src="/img/actus/<%= result.image %>" alt="image of the <%= result.title %> event">
             <div class="flow">
               <h2><%= result.title %></h2>
               <p class="cluster">
